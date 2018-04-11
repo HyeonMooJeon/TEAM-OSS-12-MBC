@@ -12,6 +12,12 @@ Member : 2013601032 전현무
 int queue() {
   
 }
+void plus(int a, char b, int c){
+	
+	char result = a + c;
+	
+	printf("%d + %d = %d",a,c,result);	
+}
 
 int main() {
 	int first = 0, last = 0, result = 0;
@@ -28,17 +34,17 @@ int main() {
 
 	switch (a) {
 
-	case'+': result = (first + last);
+	case'+': plus(first,a,last);
 		break;
-	case'-':result = (first - last);
+	case'-':
 		break;
-	case'*':result = (first*last);
+	case'*':
 		break;
-	case'/':result = (first / last);
+	case'/':
 		break;
 
 	default:
 		break;
 	}
-	printf("result : %d\n", result);
+	
 }
