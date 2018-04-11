@@ -8,7 +8,7 @@
 
 int main(){
  int first=0,last=0,result=0;
- char operator;
+ char operator=NULL;
  
  printf("연산자를입력하세요");
  scanf("%c",&operator);
