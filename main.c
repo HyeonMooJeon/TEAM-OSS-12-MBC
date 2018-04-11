@@ -1,8 +1,14 @@
 #include<stdio.h>
+#include<stdlib.h>
+
+//2013601032 전현무
+
+tydef struct TEAM{
+ int number;
+ char name[10];
+}TEAM;
 
 int main(){
+ TEAM team=null;
 
-pritf("hello");
- printf("bye");
- return 0;
 }
