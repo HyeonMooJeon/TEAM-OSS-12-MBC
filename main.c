@@ -14,13 +14,19 @@ int queue() {
 }
 void plus(int a, int c){
 	
-	char result = a + c;
+	int result = a + c;
 	
 	printf("%d + %d = %d",a,c,result);	
 }
+void div(int num1, int num2) {
+	double result = (double)num1 / num2;
+	printf("%d / %d = %f, num1, num2, result);
+}
 
+
+	       
 int main() {
-	int first = 0, last = 0, result = 0;
+	int first = 0, last = 0;
 	char a;
 
 	printf("연산자를입력하세요");
@@ -33,7 +39,7 @@ int main() {
 	scanf("%d", &last);
 
 	switch (a) {
-
+	ReEnter:;
 	case'+': plus(first,last);
 		break;
 	case'-':
@@ -41,10 +47,13 @@ int main() {
 	case'*':
 		break;
 	case'/':
+		div(first, last);
 		break;
 
 	default:
+		printf("Insert err...");
+		goto ReEnter;			
 		break;
 	}
-	
+	return 0;
 }
