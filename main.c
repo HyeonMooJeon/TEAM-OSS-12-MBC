@@ -7,7 +7,7 @@
 Project : Calculator
 Member : 2013601032 전현무
          2013244103 정병철
-         201xxxxxxx 김송봉
+         2013244128 김송봉
 */
 int queue() {
   
@@ -18,12 +18,29 @@ void plus(int a, int c){
 	
 	printf("%d + %d = %d",a,c,result);	
 }
+
+void subs(int s1, int s2)
+{
+	int result = s1-s2;
+	
+	printf("%d - %d = %d", s1, s2, result);
+}
+
+void mult(int m1, int m2)
+{
+	int result = m1 * m2;
+	
+	printf("%d * %d = %d", m1, m2, result);
+}
+
 void div(int num1, int num2) {
 	double result = (double)num1 / num2;
 	printf("%d / %d = %f, num1, num2, result);
 }
 
 
+	       
+	       
 	       
 int main() {
 	int first = 0, last = 0;
@@ -42,12 +59,11 @@ int main() {
 	ReEnter:;
 	case'+': plus(first,last);
 		break;
-	case'-':
+	case'-': subs(first,last);
 		break;
-	case'*':
+	case'*': mult(first,last);
 		break;
-	case'/':
-		div(first, last);
+	case'/': div(first, last);
 		break;
 
 	default:
