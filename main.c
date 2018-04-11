@@ -12,7 +12,7 @@ Member : 2013601032 전현무
 int queue() {
   
 }
-void plus(int a, char b, int c){
+void plus(int a, int c){
 	
 	char result = a + c;
 	
@@ -34,7 +34,7 @@ int main() {
 
 	switch (a) {
 
-	case'+': plus(first,a,last);
+	case'+': plus(first,last);
 		break;
 	case'-':
 		break;
