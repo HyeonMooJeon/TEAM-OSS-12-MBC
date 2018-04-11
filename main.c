@@ -4,9 +4,14 @@
 #include<stdlib.h>
 
 /*
-2013601032 전현무
-2013244103 정병철
+Project : Calculator
+Member : 2013601032 전현무
+         2013244103 정병철
+         201xxxxxxx 김송봉
 */
+int queue() {
+  
+}
 
 int main() {
 	int first = 0, last = 0, result = 0;
@@ -34,6 +39,6 @@ int main() {
 
 	default:
 		break;
-
 	}
+	printf("result : %d\n", result);
 }
