@@ -1,6 +1,8 @@
 #include<stdio.h>
 
-void int main(int argc, char const *argv[]) {
-  printf("hello\n", );
+int main() {
+
+    printf("First Oss code", );
+    printf("Third Oss code", );
   return 0;
 }
