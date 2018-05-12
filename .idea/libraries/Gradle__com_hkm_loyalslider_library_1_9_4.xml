@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.hkm.loyalslider:library-1.9.4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.hkm.loyalslider/library/1.9.4/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.hkm.loyalslider/library/1.9.4/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.hkm.loyalslider/library/1.9.4/9c652d1b43838b2afd4c868383abf82601c74a1d/library-1.9.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
