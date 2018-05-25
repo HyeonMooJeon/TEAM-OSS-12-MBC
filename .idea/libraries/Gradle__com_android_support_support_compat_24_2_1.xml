@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.android.support:support-compat-24.2.1">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/cropper/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar!/" />
-      <root url="jar://$PROJECT_DIR$/cropper/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar!/" />
-      <root url="file://$PROJECT_DIR$/cropper/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-compat-24.2.1.aar/4e5c0909335ca4b12c112a49100d18d5/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-compat-24.2.1.aar/4e5c0909335ca4b12c112a49100d18d5/jars/libs/internal_impl-24.2.1.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-compat-24.2.1.aar/4e5c0909335ca4b12c112a49100d18d5/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://A:/android/Sdk/extras/android/m2repository/com/android/support/support-compat/24.2.1/support-compat-24.2.1-javadoc.jar!/" />

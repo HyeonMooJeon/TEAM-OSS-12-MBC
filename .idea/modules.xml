@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Android-Photo-editing-app_EmojiMe-master.iml" filepath="$PROJECT_DIR$/Android-Photo-editing-app_EmojiMe-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TEAM-OSS-12-MBC.iml" filepath="$PROJECT_DIR$/TEAM-OSS-12-MBC.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/cropper/cropper.iml" filepath="$PROJECT_DIR$/cropper/cropper.iml" />
     </modules>
