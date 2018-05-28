@@ -115,9 +115,9 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/cut_tool"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/wach"/>
+            android:layout_toRightOf="@+id/cut_tool"
+            android:src="@drawable/wach" />
 
         <ImageView
             android:id="@+id/replace_tool"

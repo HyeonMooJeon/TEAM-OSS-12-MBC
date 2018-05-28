@@ -117,13 +117,13 @@ public class EditPictureActivity extends Activity implements View.OnClickListene
 
             case R.id.confirm_tool:                           //Confirm button
                 //Get Bitmap from Screen
-                FrameLayout view = (FrameLayout) findViewById(R.id.lycontainer);
-                view.setDrawingCacheEnabled(true);
-                view.buildDrawingCache();
+                FrameLayout view = (FrameLayout) findViewById(R.id.lycontainer);        //view  위젯을 화면에 정렬할 때 사용합니다 //view전용  이걸로 현무PART의 기능을 추가해야할것 같다.
+                view.setDrawingCacheEnabled(true);          //view로부터 bitma 가져온다. 현재 실행되는 view를 캡쳐한다.
+                view.buildDrawingCache();                   //121번째 setDrawingCacheEnabled에서 사용시 호출로 캐시정리해야함.
                 bm = view.getDrawingCache();
 
                 popup = new PopupMenu(this, v);
-                progress = ProgressDialog.show(EditPictureActivity.this, "Rendering...", "Please wait",true);
+                progress = ProgressDialog.show(EditPictureActivity.this, "Rendering...", "Please wait",true); //메세지 보여주기
                 new AsyncCaller().execute();
                 break;
 
@@ -248,12 +248,12 @@ public class EditPictureActivity extends Activity implements View.OnClickListene
         }
     }
 
-    //Remove white Background from Bitmap
+    //Remove white Background from Bitmap  비트맵에서 흰색 배경 제거 비트맵과 컬러를 전달받음
     public Bitmap getBitmapWithTransparentBG(Bitmap srcBitmap, int fromBgColor)
     {
-        Bitmap result = srcBitmap.copy(Bitmap.Config.ARGB_8888, true);
-        int nWidth = result.getWidth();
-        int nHeight = result.getHeight();
+        Bitmap result = srcBitmap.copy(Bitmap.Config.ARGB_8888, true);  //ARGB_8888 (32비트) 비트맵 카피해서 결과값에 넣어준다.
+        int nWidth = result.getWidth();    //넓이
+        int nHeight = result.getHeight();  //높이
 
         for (int y = 0; y < nHeight; ++y)
             for (int x = 0; x < nWidth; ++x)
@@ -261,13 +261,13 @@ public class EditPictureActivity extends Activity implements View.OnClickListene
         int nPixelColor = result.getPixel(x, y);
         if(nPixelColor == fromBgColor)
         {
-            result.setPixel(x, y, Color.TRANSPARENT);
+            result.setPixel(x, y, Color.TRANSPARENT);// TRANSPARENT(투명한) 색으로 바꿔준다 x.y를
         }
     }
         return result;
     }
 
-    //Trim Bitmap
+    //Trim Bitmap 손질 비트맵
     public Bitmap trimBitmap(Bitmap bmp)
     {
         int imgHeight = bmp.getHeight();
@@ -447,7 +447,7 @@ public class EditPictureActivity extends Activity implements View.OnClickListene
     }
 
     //AsyncTask for PrgoressDialog
-    private class AsyncCaller extends AsyncTask<Void, Void, Void>
+    private class AsyncCaller extends AsyncTask<Void, Void, Void> //백그라운드에서 스레드 돌리는거
     {
         @Override
         protected Void doInBackground(Void... params) {
@@ -476,7 +476,7 @@ public class EditPictureActivity extends Activity implements View.OnClickListene
                 {
                     if(item.getTitle().equals("Expressions"))
                     {
-                        //Save Bitmap to File
+                        //Save Bitmap to File       비트맵 저장
                         instance.bitmapNamesForExpressions.add(saveBitmapForExpressions(resultBitmap));
 
                         //Load File called ".dat" to external storage

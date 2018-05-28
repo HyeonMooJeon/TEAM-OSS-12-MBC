@@ -10,13 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="#FE5D26">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:fontFamily="sans-serif"
-            android:text="Edit Picture"
+            android:text="설정창"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -123,9 +124,9 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/erasor3_tool"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/rotare"/>
+            android:layout_toRightOf="@+id/erasor3_tool"
+            android:src="@drawable/rotare" />
 
         <ImageView
             android:id="@+id/confirm3_tool"
@@ -135,6 +136,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
             android:src="@drawable/ok"/>
+
     </RelativeLayout>
 
 </RelativeLayout>

@@ -361,7 +361,7 @@ public class ExpressionsFragment extends Fragment
                 popup.show();
             }
         });
-
+        //
         ru_grid.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
