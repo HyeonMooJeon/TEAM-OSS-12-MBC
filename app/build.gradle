@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 27
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.example.admin.emojime"
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -19,11 +19,6 @@ android {
         }
     }
 
-    repositories {
-        jcenter({url "http://jcenter.bintray.com/"})
-        mavenCentral()
-        google()
-    }
 
     dexOptions {
         javaMaxHeapSize"4g"
@@ -45,4 +40,9 @@ dependencies {
     implementation 'io.reactivex:rxandroid:1.1.0'
     implementation 'com.hkm.loyalslider:library:1.9.4'
     testImplementation 'junit:junit:4.12'
+
+
+    implementation 'jp.wasabeef:glide-transformations:3.3.0'
+    // If you want to use the GPU Filters
+    implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
 }
