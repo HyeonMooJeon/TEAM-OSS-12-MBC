@@ -1,17 +1,21 @@
 package Server;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server_Main {
-   private static final int PORT = 9042; //포트 지정
+   private static final int PORT = 9043; //포트 지정
    private static final int THREAD_CNT = 30; //쓰레드 풀 최대 쓰레드 개수 지정. 쓰레드 풀은 미리 생성해놓은 쓰레드로 작업 할당
    private static ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_CNT);
    
@@ -23,10 +27,7 @@ public class Server_Main {
       Socket clientSocket = null; // 서버소켓이 지정한 포트를 타고온 상대 ip를 저장할 수 있다.
        PrintWriter out = null;  // String 타입의 문자를 보낼수 있는 함수.
        BufferedReader in = null;//stream 타입의 문자를 읽어서 저장할 수 있는 함수.
-
-       //어레이 리스트안에 해쉬맵을 넣어서 받은 데이터 관리함.
-       //첫번쨰 스트링값은 키값이고 두번쨰 스트링값은 위도경도  컴마로 구분해서 넣어주기
-       ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+       ArrayList<String> arrayList = new ArrayList<>();
       
        /*추가구간
        // 데이터를 보내는 레퍼런스
