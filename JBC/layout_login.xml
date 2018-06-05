@@ -1,0 +1,71 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Find Kid"
+        android:textSize="30dp"
+        android:background="#00BFFF"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/aaa"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/loginbtn"
+            android:layout_marginTop="240dp"
+            android:gravity="center"
+            android:text="ID : " />
+
+        <!---ID 입력칸
+        싱글라인으로 하여 엔터키 막아버리기. 다음 버튼이 확인으로 바뀜-->
+        <EditText
+            android:id="@+id/textID"
+            android:layout_width="170dp"
+            android:layout_height="50dp"
+            android:layout_alignTop="@+id/aaa"
+            android:singleLine = "true"
+            android:lines = "1"
+            android:layout_toEndOf="@+id/aaa"
+            />
+
+        <!---로그인 버튼
+         onClick 이름을 여기서 지정해줌. 메소드 동작은 액티비티에 존재.-->
+        <Button
+            android:id="@+id/loginbtn"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="225dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:background="#00BFFF"
+            android:gravity="center"
+            android:onClick="login"
+            android:text="Start" />
+    </RelativeLayout>
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#00BFFF"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
