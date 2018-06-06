@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -36,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
     ToggleButton tb;
     public String sendData;
     String getID;
-    public boolean sendinfo = true;
-    private Socket socket;
+    public Socket socket;
+    //----------------------------------------------------포트와 IP꼭 바꿔줄것!!
     public static final int PORT = 7890;
     public static final String IP = "192.168.55.140";
-    private BufferedWriter networkWriter;
+    public BufferedWriter networkWriter;
     Timer timer = null;
     TimerTask t;
     @Override
@@ -60,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                //서버가 없을 경우.
             }
         };
         thread.start();
@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         ID = (TextView)findViewById(R.id.getid);
         ID.setText(getID);
         tv.setText("위치정보 미수신중");
+
         tb = (ToggleButton)findViewById(R.id.toggle1);
         // im LocationManager얻어옴.
         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -82,9 +83,9 @@ public class MainActivity extends AppCompatActivity {
                 try{
                     if(tb.isChecked()){ //수신될 경우
                         tv.setText("수신중..");
-                        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,  1000000, mLocationListener);
+                        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000,  1000000, mLocationListener);
                                 // 위치제공자 , 시간간격, 변경거리
-                        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1000000, mLocationListener);
+                        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 1000000, mLocationListener);
 
                         t = new TimerTask() {
                             @Override
@@ -94,12 +95,11 @@ public class MainActivity extends AppCompatActivity {
                                     PrintWriter out = new PrintWriter(networkWriter, true);
                                     out.println(getinfo);
                                     System.out.println("\n서버로 보내지는 데이터 = " + out +"\n보내야 하는 데이터 "+ getinfo);
-                                }  catch (Exception e) {}
+                                }  catch (Exception e) { }
                             }
                         };
                         timer = new Timer();
-                        timer.schedule(t,0,3000);
-
+                        timer.schedule(t,0,10000);
 
                     }else{              //수신이 안되는경우
                         tv.setText("위치정보 미수신중");
@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String SendData() {
+        System.out.println("SendData를 호출했습니다.\n\n");
         return sendData;
     }
 
@@ -130,15 +131,13 @@ public class MainActivity extends AppCompatActivity {
             tv.setText("위치정보 : " + provider);
             lati.setText(""+latitude);
             longi.setText(""+longitude);
-            sendData = getID + "/"+Double.toString(latitude)+"/" + Double.toString(longitude);
-
-
+            //해시값 사용하기위해 콤마(,)로 바꿈.
+            sendData = getID + ","+Double.toString(latitude)+"/" + Double.toString(longitude);
             //Intent ID = getIntent()
             //String PW = IDPW.getStringExtra("passID") 또는 passPW 입력하면 값을 받음.
             //sendlongi = 경도   sendlati = 위도    getid = 아이디 얻어오기, 여기서는 lati, longi, ID
             // + "\n고도 : " + altitude + "\n정확도 : "  + accuracy
             //위에 주석 코드 앞으로 넣으면 고도, 정확도까지 제공.
-
             //-----------------데이터 보내기----------------
             //        아이디 +         위도              +         경도
             /*
@@ -150,8 +149,6 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             */
-
-
         }
         public void onProviderDisabled(String provider) {
         }
@@ -177,8 +174,6 @@ public class MainActivity extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
 
                                     if (Build.VERSION.SDK_INT >= 4.0) {
-                              /*          requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,
-                                                Manifest.permission.READ_PHONE_STATE,Manifest.permission.READ_EXTERNAL_STORAGE}, 1);*/
                                         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                                     }
                                 }
@@ -196,12 +191,9 @@ public class MainActivity extends AppCompatActivity {
                     requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                     //        getThumbInfo();
                 }
-            }else{
-                //권한이 있을 경우
-                //getThumbInfo();
+            }else{       //권한이 있을 경우
             }
-        } else {
-            //마시멜로 이하 버젼인경우.. 요새는 그닥없으니 별도 처리 X
+        } else {         //마시멜로 이하 버젼인경우.. 요새는 그닥없으니 별도 처리 X
         }
     }
 
@@ -234,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    //앱 종료시 소켓도 닫아줌.
     @Override
     public void onStop() {
         super.onStop();

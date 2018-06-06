@@ -24,6 +24,7 @@ public class LoginActivity extends Activity {
         Intent forMain = new Intent(LoginActivity.this , MainActivity.class);
         forMain.putExtra("passID", id);
         startActivity(forMain);
+        System.out.println("LoginActivity에서 "+ id + "를 intent로 넘겨줍니다.\n");
     }
 }
 

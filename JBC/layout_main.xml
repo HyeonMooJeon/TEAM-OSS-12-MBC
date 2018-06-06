@@ -18,12 +18,11 @@
 
     <TextView
         android:id="@+id/sendlongi"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="94dp"
-        android:layout_marginTop="249dp"
+        android:layout_alignStart="@+id/getid"
+        android:gravity="center"
+        android:layout_below="@+id/sendlati"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ToggleButton
@@ -41,63 +40,64 @@
     <!--LoginActivity의 TextView로 부터 얻어온 ID를 보여줌.-->
     <TextView
         android:id="@+id/getid"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_above="@+id/sendlati"
-        android:layout_alignStart="@+id/sendlongi"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        />
+        android:layout_alignTop="@+id/textView6"
+        android:layout_toEndOf="@+id/textView6"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <!--위도를 보여줌-->
     <TextView
         android:id="@+id/sendlati"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="39dp"
-        android:layout_above="@+id/sendlongi"
-        android:layout_alignStart="@+id/sendlongi"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_marginBottom="-249dp" />
+        android:layout_alignStart="@+id/getid"
+        android:layout_below="@+id/getid"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <!--경도를 보여줌-->
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_above="@+id/sendlongi"
-        android:layout_marginBottom="-249dp"
-        android:layout_toStartOf="@+id/sendlongi"
+        android:layout_below="@+id/getid"
+        android:layout_toStartOf="@+id/getid"
         android:gravity="center"
-        android:text="위도:"
+        android:text="위도: "
         android:textSize="15dp" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_alignTop="@+id/sendlongi"
-        android:layout_toStartOf="@+id/sendlongi"
+        android:layout_below="@+id/sendlati"
+        android:layout_toStartOf="@+id/getid"
         android:gravity="center"
-        android:text="경도;"
+        android:text="경도: "
         android:textSize="15dp" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_above="@+id/sendlati"
-        android:layout_toStartOf="@+id/sendlongi"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="169dp"
         android:gravity="center"
-        android:text="아이디:"
+        android:text="아이디: "
         android:textSize="15dp" />
 
     <!--수신 방법을 알려주며 수신, 미수신 상태 표시.-->
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="131dp"
-        android:layout_height="34dp"
+        android:layout_width="140dp"
+        android:layout_height="35dp"
         android:layout_alignParentBottom="true"
-        android:gravity="center"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="121dp" />
+        android:layout_marginBottom="120dp"
+        android:gravity="center" />
 
 </RelativeLayout>
