@@ -56,15 +56,26 @@ public class Thread implements Runnable{
 	        		 mOut.write(key + table.get(key)); // key, value 받은걸 클라이언트로 쏴줌.
 	        	 }
 	        	 table.clear(); // hashtable 초기화
+	        
+	        	 
+	        	 // 0608 추가내용 
+	        	 if(Sending ==null) // while문 탈출
+	        	 {
+	        		 break;
+	        	 }
+	        	 //0608 추가내용 
 	      	}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				socket.close(); // 소켓 종료.
+				socket.close(); // 클라이언트 소켓 종료.
+       		 	System.out.println("▶ 클라이언트 연결이 종료되었습니다."); // 클라이언트 소켓 종료 메시지 띄움 
+
 			} catch (IOException e) {
 				e.printStackTrace();
+				
 			}
 		}
 	}
