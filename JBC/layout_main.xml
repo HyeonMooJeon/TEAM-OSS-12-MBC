@@ -92,6 +92,7 @@
 
     <!--수신 방법을 알려주며 수신, 미수신 상태 표시.-->
     <TextView
+        android:background="@drawable/btnback"
         android:id="@+id/textView2"
         android:layout_width="140dp"
         android:layout_height="35dp"

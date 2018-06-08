@@ -1,4 +1,4 @@
-﻿package com.example.admin.safasdf;
+package com.example.admin.safasdf;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
             lati.setText(""+latitude);
             longi.setText(""+longitude);
             //해시값 사용하기위해 콤마(,)로 바꿈.
-	sendData = getID + "/"+Double.toString(latitude)+"," + Double.toString(longitude);
+            sendData = getID + ","+Double.toString(latitude)+"/" + Double.toString(longitude);
             //Intent ID = getIntent()
             //String PW = IDPW.getStringExtra("passID") 또는 passPW 입력하면 값을 받음.
             //sendlongi = 경도   sendlati = 위도    getid = 아이디 얻어오기, 여기서는 lati, longi, ID
