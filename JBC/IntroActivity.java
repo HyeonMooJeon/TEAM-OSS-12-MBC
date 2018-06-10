@@ -22,6 +22,6 @@ public class IntroActivity extends Activity {
                 finish();
             }
             //2초 지속
-        }, 1000);
+        }, 2000);
     }
 }
