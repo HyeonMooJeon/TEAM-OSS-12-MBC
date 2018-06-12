@@ -23,7 +23,7 @@ public class CliThread extends Thread
 
   static String Tag = null;
   static String Loca = "36.799210, 127.074920";
-  static String ParentTag = null;
+  String ParentTag = null;
   static String[] Sending;
   static String key = null;
 
@@ -38,7 +38,7 @@ public class CliThread extends Thread
   Socket clientSocket = null;
   PrintWriter out = null;
   BufferedReader in = null;
-  Hashtable<String, String> table = new Hashtable(1);
+  Hashtable<String, String> table = new Hashtable(1); //해쉬테이블 생성
 
   public CliThread(Socket socket) {
     this.socket = socket;
@@ -47,14 +47,14 @@ public class CliThread extends Thread
   public void sleep(int time)
   {
     try {
-      Thread.sleep(time);
+      Thread.sleep(time); // 브레이크를 걸어주기위해. 다른 쓰레드의 작업을 처리하기위해 사용 
     }
     catch (InterruptedException localInterruptedException)
     {
     }
   }
 
-  public synchronized void run()
+  public synchronized void run() //synchronized 로 동기화 
   {
     try
     {
@@ -77,44 +77,44 @@ public class CliThread extends Thread
 
       System.out.println("while 문 밖 ");
 
-      while ((ParentTag = mIn.readLine()) != null)
+      while ((ParentTag = mIn.readLine()) != null) //읽어들일데이터가 없을떄까지 동작 
       {
         System.out.println("while 문 안 ");
         System.out.println(ParentTag);
 
-        if (ParentTag.contains("/"))
+        if (ParentTag.contains("/")) // '/'가있는 데이터 즉 아이클라가 보낸 데이터 처리
         {
           System.out.println("if 문 안 ");
 
-          Sending = ParentTag.split("/");
-          Tag = Sending[0];
-          Loca = Sending[1];
+          Sending = ParentTag.split("/"); // 태그명/위도,경도 형태로 들어오는 데이터를  '/'를 기준으로 받은 데이터를 나눔
+          Tag = Sending[0];  // 태그를  sending[0]에
+          Loca = Sending[1];  // 위치정보를 sending[1]에 저장
 
-          this.table.put(Sending[0], Sending[1]);
+          this.table.put(Sending[0], Sending[1]); //해쉬테이블에 태그 , 위치값을 넣음
 
           System.out.println("Loca입니다" + Loca);
 
-          Enumeration HT = this.table.keys();
+          Enumeration HT = this.table.keys(); //각각의 객체를 하나씩 처리 
 
           System.out.println("while문 -  more element ");
           key = HT.nextElement().toString();
 
-          System.out.println("▷ key 값 : " + key + "  ▷ value 값 : " + (String)this.table.get(key));
+          System.out.println("▷ key 값 : " + key + "  ▷ value 값 : " + (String)this.table.get(key)); //키값과 밸유값을 출력
         }
-        else if (ParentTag.equals(key))
+        else if (ParentTag.equals(key)) //부모클라가 태그를 보내고 아이클라와 태그가 동일할시 작동
         {
           System.out.println("else if 문 들어옴 ");
 
-          while ((CliThread.ParentTag = mIn.readLine()) != null)
+          while (true) //조건문 돔
           {
             System.out.println("서버에서 보낸 데이터 : " + Loca);
             inputLine = Loca;
 
-            bw.write(inputLine);
+            bw.write(inputLine); //부모클라에게 써줌
             bw.newLine();
             bw.flush();
             System.out.println("부모 클라이언트로부터 받은 데이터 : " + ParentTag);
-            this.sleep(10);
+            this.sleep(1000); //다른쓰레드로 넘기기위해
           }
         }
         else
@@ -122,7 +122,7 @@ public class CliThread extends Thread
           System.out.println("else문. 위 조건 안걸림~  ");
         }
 
-        this.sleep(10);
+        this.sleep(10); //다른쓰레드로 넘기기위해
       } //while문
     }
     catch (IOException e)
