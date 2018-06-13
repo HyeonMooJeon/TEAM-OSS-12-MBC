@@ -1,12 +1,8 @@
 package com.example.admin.asdf;
-/*
-어플리케이션 이름 : 미아방지 (Parent App)
-개발자   : 전현무
-개발목적 : 아동 실종, 납치 범죄율을 줄이기 위해서
-개발날자 2018-05-29 ~ 2018-06-12
- */
+
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,8 +13,12 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.os.StrictMode;
+import android.os.SystemClock;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -60,6 +60,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -77,10 +78,14 @@ import noman.googleplaces.PlaceType;
 import noman.googleplaces.PlacesException;
 import noman.googleplaces.PlacesListener;
 
+import static java.lang.System.exit;
+
+
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, PlacesListener {
+        LocationListener,
+        PlacesListener {
 
     //2018-05-30 현무 추가
     private Socket socket;  //소켓생성
@@ -90,10 +95,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     double latitude;
     double longitude;
     TextView tv;
-    private static int port = 9946;
-    private static String ip = "192.168.0.101";
+    private static int port = 7890;
+    private static String ip = "192.168.55.140";
 
-    //병철 사용 변수
+    //병철 추가 사용 변수
     int i = 0;                    //버튼 클릭. %2 나머지 1과 0으로 눌렸나 안눌렸나 확인.
     double MKlong, MKlati;      //범위 정하는 버튼시 그때의 위도.경도 저장 변수
     String name;                //Setting_Area_Activity에서 받는 이름
@@ -101,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     ToggleButton Areaset;       //버튼 on,off 가능 토글 버튼으로 만듬
     MarkerOptions mymarker;     //마커추가
     CircleOptions setArea;      //범위 원형으로 추가
+    int chosemarker;
+    Vibrator vibe;
 
     //----------
     private GoogleApiClient mGoogleApiClient = null;
@@ -136,8 +143,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final String TAG = "googlemap";
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2002;
-    private static final int UPDATE_INTERVAL_MS = 1000;  // 1초
-    private static final int FASTEST_UPDATE_INTERVAL_MS = 500; // 0.5초
+    private static final int UPDATE_INTERVAL_MS = 4000;  // 4초
+    private static final int FASTEST_UPDATE_INTERVAL_MS = 3000; // 3초
 
     //현무추가 2018-06-01~ 2018-06-04
     private AppCompatActivity mActivity;
@@ -148,11 +155,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     boolean mMoveMapByAPI = true;
     Intent popup;
     LatLng currentPosition;
+
     LocationRequest locationRequest = new LocationRequest()
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
             .setInterval(UPDATE_INTERVAL_MS)
             .setFastestInterval(FASTEST_UPDATE_INTERVAL_MS);
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { //oncreate 시작
@@ -160,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_main);
+
 
         final Button trackingbutton = (Button) findViewById(R.id.TrackingButton);
         final Button line_button = (Button) findViewById(R.id.LineButton);
@@ -176,9 +184,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         previous_marker = new ArrayList<Marker>();
 
         polylineOptions = new PolylineOptions(); //위치정보 저장된다.
-        worker = new ThreadSocket();            // 스레드 작동 메인 ui에서 따로돌린다.
-        dataparser = new DataParser();
-        worker.start();
+
 
         //인근 경찰서 출력 버튼 (3000미터 이내 경찰서만 맵상에 출력한다. )
         buttonPolice.setOnClickListener(new View.OnClickListener() {
@@ -198,16 +204,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     if (trackingbutton.getText().equals("위치 찾기 시작")) {
                         trackingbutton.setText("위치 찾는중");
                         Log.d(TAG, "수신중");
+                        worker = new ThreadSocket();            // 스레드 작동 메인 ui에서 따로돌린다.
+                        worker.start();
 
+                        try{
+                            Thread.sleep(1000);
+                            for(int j=0;j<10000;j++){ }
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
                         //위치정보 를 10초 간격으로 설정하여 메소드 실행
                         t_task = new T_Task();
                         timer = new Timer();
                         timer.schedule(t_task, 0, 5000);
 
+
                         //위치정보 저장을위해. 데이터는 저장되어 polyline에 사용한다. 11초 간격으로 실행
                         TimeControl = new TimeControl();
                         timer_Control = new Timer();
                         timer_Control.schedule(TimeControl, 11000, 11000);
+
                     }
                     //토글중이 아닐때 timer 캔슬시킨다.
                     else if (trackingbutton.getText().equals("위치 찾는중")) {
@@ -219,6 +235,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         timer_Control.cancel();
                         TimeControl.cancel();
+
+                        try{
+                            socket.close();
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
                     }
                 } catch (SecurityException ex) {
                     ex.printStackTrace();
@@ -265,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 //i가 저장되는 간격은 10초이므로 1 == 10초
                                 try {
                                     if (!((timeMarker.get(i = i + 1)) == null)) {
-                                          mGoogleMap.addMarker(new MarkerOptions().position(endLatLng.get(i))
+                                        mGoogleMap.addMarker(new MarkerOptions().position(endLatLng.get(i))
                                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.footprint))
                                                 .title("지나간 날자,시간")
                                                 .alpha(0.5f) //투명도 설정
@@ -277,14 +299,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 } catch(IndexOutOfBoundsException e){
                                     Log.d(TAG,"인덱스:" +i);
 
-                                    }
+                                }
                             }
                         }
 
                         polylineOptions.color(Color.BLUE);                 //파란색 설정
                         polylineOptions.width(5);//넓이5
                         polylineOptions.geodesic(true);
-
                         line = mGoogleMap.addPolyline(polylineOptions); //폴리라인을 추가해서 구글맵에 그린다.
                         line.setVisible(true);                           //보이게 설정
                         Log.d(TAG, "ThreadPoliLine 실행중");
@@ -308,7 +329,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.d(TAG, "onCreate");
         mActivity = this;
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
 
         //맵을 frgment로 얻어온다.
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
@@ -433,7 +457,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override //위도 경도 받아오기
     public void onLocationChanged(Location location) {
-
+        location.setLatitude(latitude);
+        location.setLatitude(longitude);
         currentPosition = new LatLng(latitude, longitude);
         // = new LatLng( location.getLatitude(), location.getLongitude());  //이부분에 데이터 위 경도값 줘야함.
         //latitude longitude
@@ -467,8 +492,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onStop() {
 
-        if (mRequestingLocationUpdates) {
+        try{
+            socket.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
 
+        if (mRequestingLocationUpdates) {
             Log.d(TAG, "onStop : call stopLocationUpdates");
             stopLocationUpdates();
         }
@@ -602,7 +632,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         String markerTitle = "위치정보 가져올 수 없음";
         String markerSnippet = "위치 퍼미션과 GPS 활성 요부 확인하세요";
 
-        if (currentMarker != null) currentMarker.remove();
+        if (currentMarker != null) {
+            currentMarker.remove();
+        }
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(DEFAULT_LOCATION);
@@ -755,7 +787,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 String getname = data.getExtras().getString("name");
                 name = getname;
             } catch (NullPointerException e) { }
-                System.out.println("넓이는 " + Area + "이름은 " + name);
+            try{
+                chosemarker = data.getExtras().getInt("marker");
+            }catch(NullPointerException e) { }
+            System.out.println("넓이는 " + Area + "이름은 " + name);
             SettingArea();
         }
 
@@ -779,10 +814,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //병철추가  789~853
     public void DelArea() {
         System.out.println("DelArea 호출 \n");
-        //this.mGoogleMap.clear();
-        mymarker.visible(false);
-        setArea.visible(false);
+        this.mGoogleMap.clear();
+        //mymarker.visible(false);
+        //setArea.visible(false);
+        vibe.cancel();
 
+    }
+
+    public void checkArea() {
+        Log.d(TAG, "checkArea()시작");
+        try {
+            double chk = getdistance(MKlati, latitude, MKlong, longitude);
+            if((int)chk > Area) {
+                Toast.makeText(this, "범위를 벗어남", Toast.LENGTH_LONG).show();
+                vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                vibe.vibrate(500);
+                Log.d(TAG, "checkArea()에서 구한 범위 : "+ chk + "<" + Area);
+            }
+        }  catch (Exception e) { }
     }
 
     public void SettingArea() {
@@ -796,23 +845,40 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mymarker = new MarkerOptions().position(position);   //마커위치
         mymarker.title(name);
         mymarker.snippet(Area + "m");
+        switch(chosemarker) {
+            case 1:
+                mymarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.coffee));
+                break;
+            case 2:
+                mymarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.school));
+                break;
+            case 3:
+                mymarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.pcroom));
+                break;
+            case 4:
+                mymarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.friend));
+                break;
+        }
         // 반경 1KM원
         setArea = new CircleOptions().center(position) //원점
                 .radius(Area)      //반지름 단위 : 1km = 1000m
                 .strokeWidth(1f)  //선 두께 1f
-                .fillColor(Color.parseColor("#8000000f")); //배경색
+                .fillColor(Color.parseColor("#80000000")); //배경색
 
         //마커추가
         this.mGoogleMap.addMarker(mymarker);
 
         //원추가
         this.mGoogleMap.addCircle(setArea);
+        checkArea();
     }
 
-    public void showToast() {
-        Toast.makeText(this, "범위 벗어남", Toast.LENGTH_LONG).show();
-    }
-
+    /*
+    각의 단위 그리는 방법.
+    디그리(degree) = 원 한바퀴를 360도로 표현하는 방법(일상에서 쓰는 법)
+    라디안(radioan) = 반지름의 길이와 두개의 반지름이 이루는 호의 길이가 같은 경우가 1 라디안 이다.
+    Math.PI = 파이(3.141592...)
+    */
     public double getdistance(double lati1, double lati2, double long1, double long2) {
 
         double theta, dist;
@@ -827,13 +893,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         return dist;
     }
-
-    /*
-    각의 단위 그리는 방법.
-    디그리(degree) = 원 한바퀴를 360도로 표현하는 방법(일상에서 쓰는 법)
-    라디안(radioan) = 반지름의 길이와 두개의 반지름이 이루는 호의 길이가 같은 경우가 1 라디안 이다.
-    Math.PI = 파이(3.141592...)
-    */
     private double deg2rad(double deg) {
         return (double) (deg * Math.PI / (double) 180);
     }
@@ -841,12 +900,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     // 주어진 라디언(radian) 값을 도(degree) 값으로 변환
     private double rad2deg(double rad) {
         return (double) (rad * (double) 180 / Math.PI);
-    }
-
-
-    //병철, 에러나는거 이거 있어야 해제됨. 이유는 잘 모름....
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
     }
 
     //HM 2018_06_08 스레드 및 데이터
@@ -860,6 +913,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             try {
                 //소켓을 생성하고 입출력 스트립을 소켓에 연결한다.
                 socket = new Socket(ip, port); //소켓생성
+                if(socket==null)
+                {
+                    Log.d(TAG, "socket 생성 실패\n");
+                    exit( 1);
+                }
                 networkWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                 out = new PrintWriter(networkWriter, true); //데이터를 전송시 stream 형태로 변환하여// 전송한다.
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream())); //데이터 수신시 stream을 받아들인다.
@@ -868,10 +926,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
 
         } //
-
     }
-
-    ;
 
     //HM 2018_06_10 데이터 처리 사용
     public class T_Task extends TimerTask {
@@ -899,50 +954,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
-
-    ;
-
-    //HM 2018_06_10 데이터 처리 미사용 예정
-    public class DataParser extends Thread {
-        public DataParser() {
-        }
-
-        public void run() {
-
-            try {
-                //스레드 루프
-                while (true) {
-
-                    out.println(tv.getText()); //텍스트에 입력한 문자열을 서버에 송신한다. 데이터 방법1 계속보낼떄마다 10초마다 문자열을 보내줌 방법2 첫태그만 보낸다.
-                    Log.d(TAG, "서버에 보낸 Text:" + tv.getText());
-                    data = in.readLine(); // in으로 받은 데이타를 String 형태로 읽어 data 에 저장
-                    Log.d(TAG, "서버에 읽은 Data:" + data);
-                    String str = data;
-                    String[] array = str.split(","); //받은 data를 잘라서 넣는다. 서버에서 처리해줘야함 ex) baby_1
-                    Log.d(TAG, "Data 처리 위도:" + array[0] + "경도:" + array[1]);
-                    latitude = Double.parseDouble(array[0]);
-                    longitude = Double.parseDouble(array[1]);
-
-                    //병철---범위 벗어났을 경우 Toast로 보여주며 진동 추가.
-                    if(Areaset.isChecked()) {
-                        if(getdistance(latitude, MKlati, longitude, MKlong)>1000) {
-                            showToast();
-                            Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                            vibe.vibrate(500);
-                        }
-                    }
-                    //------------------------------------
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            } catch (Exception e1) {
-            }
-        }
-    }
-
 
     // 2018-06-09 현무 추가 장소 출력 implements해서 사용중
     @Override
@@ -1024,15 +1035,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         public void run() {
             try {
 
-                polylineOptions.add(new LatLng(latitude, longitude));
-                Log.d(TAG, "현재 폴리라인이 저장한 값 :" + polylineOptions.getPoints());
-                SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd - hh:mm:ss");
-                Log.d(TAG,date.format(today) );
-                long mnow=System.currentTimeMillis();
-                today = new Date(mnow);
-
-                timeMarker.add(date.format(today));
-
+                if( (latitude != 0.0) && (longitude != 0.0) ) {
+                    polylineOptions.add(new LatLng(latitude, longitude));
+                    Log.d(TAG, "현재 폴리라인이 저장한 값 :" + polylineOptions.getPoints());
+                    SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd - hh:mm:ss");
+                    Log.d(TAG, date.format(today));
+                    long mnow = System.currentTimeMillis();
+                    today = new Date(mnow);
+                    timeMarker.add(date.format(today));
+                    //병철 꼽사리
+                }else{
+                    Log.d(TAG, "서버에서 위도 경도를 받아오지 못합니다.");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
