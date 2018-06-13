@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server_Main {
-   private static final int PORT = 8056; //포트 지정
+   private static final int PORT = 8063; //포트 지정
 
    private static final int THREAD_CNT = 30; //쓰레드 풀 최대 쓰레드 개수 지정. 쓰레드 풀은 미리 생성해놓은 쓰레드로 작업 할당. 30번의 쓰레드가 돌 수있음. 즉 30명의 클라 접속.
    private static ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_CNT);
