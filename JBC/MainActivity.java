@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.AnimationDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,14 +18,21 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.airbnb.lottie.LottieAnimationView;
+
+import junit.framework.Test;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -42,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     public BufferedWriter networkWriter;
     Timer timer = null;
     TimerTask t;
+    ImageView imageView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
         ID = (TextView)findViewById(R.id.getid);
         ID.setText(getID);
         tv.setText("위치정보 미수신중");
+        imageView = (ImageView) findViewById(R.id.loadingbar);
+        final AnimationDrawable drawable = (AnimationDrawable) imageView.getBackground();
 
         tb = (ToggleButton)findViewById(R.id.toggle1);
         // im LocationManager얻어옴.
@@ -83,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 try{
                     if(tb.isChecked()){ //수신될 경우
                         tv.setText("수신중..");
+                        drawable.start();
                         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000,  1000000, mLocationListener);
                                 // 위치제공자 , 시간간격, 변경거리
                         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 1000000, mLocationListener);
@@ -102,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                         timer.schedule(t,0,10000);
 
                     }else{              //수신이 안되는경우
+                        drawable.stop();
                         tv.setText("위치정보 미수신중");
                         lm.removeUpdates(mLocationListener);  //  미수신중일떄 자원 해제해준다.
 
@@ -115,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
     public String SendData() {
         System.out.println("SendData를 호출했습니다.\n\n");
+        RandLocation();
         return sendData;
     }
 
@@ -132,7 +149,11 @@ public class MainActivity extends AppCompatActivity {
             lati.setText(""+latitude);
             longi.setText(""+longitude);
             //해시값 사용하기위해 콤마(,)로 바꿈.
+
+
             sendData = getID + ","+Double.toString(latitude)+"/" + Double.toString(longitude);
+            //랜덤 위치 정하기 싫으면 바로 아래줄 주석처리!! 랜덤
+
             //Intent ID = getIntent()
             //String PW = IDPW.getStringExtra("passID") 또는 passPW 입력하면 값을 받음.
             //sendlongi = 경도   sendlati = 위도    getid = 아이디 얻어오기, 여기서는 lati, longi, ID
@@ -232,8 +253,68 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         try{
             socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) {    }
+    }
+    public void RandLocation() {
+        Random random = new Random();
+        int i;
+        i = random.nextInt(12);
+        switch ( i ) {
+            case 1:
+                sendData = getID + "," + "36.798746" + "/" + "127.074040";  //자대
+                System.out.println("자대");
+                break;
+            case 2:
+                sendData = getID + "," + "36.798772" + "/" + "127.075875";  //인대
+                System.out.println("인대");
+                break;
+            case 3:
+                sendData = getID + "," + "36.797415" + "/" + "127.075950";  //도서관
+                System.out.println("도서관");
+                break;
+            case 4:
+                sendData = getID + "," + "36.800147" + "/" + "127.077119";  //원화관
+                System.out.println("원화관");
+                break;
+            case 5:
+                sendData = getID + "," + "36.800276" + "/" + "127.074823";  //본관
+                System.out.println("본관");
+                break;
+            case 6:
+                sendData = getID + "," + "36.800139" + "/" + "127.072591";  //공대
+                System.out.println("공대");
+                break;
+            case 7:
+                sendData = getID + "," + "36.801067" + "/" + "127.069683";  //체육관
+                System.out.println("체육관");
+                break;
+            case 8:
+                sendData = getID + "," + "36.798352" + "/" + "127.072719";  //학군단
+                System.out.println("학군단");
+                break;
+            case 9:
+                sendData = getID + "," + "36.797501" + "/" + "127.077214";  //학회
+                System.out.println("학회");
+                break;
+            case 10:
+                sendData = getID + "," + "36.795680" + "/" + "127.069757";  //여자기숙사
+                System.out.println("여자기숙사");
+                break;
+            case 11:
+                System.out.println("남자 기숙사");
+                sendData = getID + "," + "36.796161" + "/" + "127.070841";  //남자기숙사
+                break;
+            case 12:
+                System.out.println("생활 친교관");
+                sendData = getID + "," + "36.795517" + "/" + "127.070637";  //생활친교관(??)
+                break;
+            case 0:
+                System.out.println("학교 호수");
+                sendData = getID + "," + "36.797652" + "/" + "127.073084";  //학교 호수
+                break;
+
         }
     }
+
+
 }
