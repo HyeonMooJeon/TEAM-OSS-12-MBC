@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="220dp"
+    android:layout_height="180dp"
+    android:background="#AAAAAA">
+
+
+    <Button
+        android:id="@+id/ok_btn"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/round"
+        android:gravity="center"
+        android:onClick="OK"
+        android:text="확인"
+        android:textColor="#000000" />
+
+    <RelativeLayout
+
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:background="#FFFFFF">
+
+        <TextView
+            android:id="@+id/id"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="이름 : "
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/meter"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:gravity="center"
+            android:text="범위 : "
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/viewmeter"
+            android:layout_width="20dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:text="m"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/setname"
+            android:layout_width="110dp"
+            android:layout_height="50dp"
+            android:layout_toEndOf="@+id/id"
+            android:gravity="center_vertical|left"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLines="1"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/setmeter"
+            android:layout_width="90dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/id"
+            android:gravity="center_vertical|right"
+            android:inputType="number"
+            android:maxLines="1"
+            android:textColor="#000000" />
+    </RelativeLayout>
+
+</RelativeLayout>
