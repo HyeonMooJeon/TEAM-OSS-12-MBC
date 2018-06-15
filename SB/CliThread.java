@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Enumeration;
@@ -67,63 +66,87 @@ public class CliThread extends Thread
       in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
      out = new PrintWriter(socket.getOutputStream(), true);
-      os = this.socket.getOutputStream();
-      osw = new OutputStreamWriter(os);
-      bw = new BufferedWriter(osw);
+    //  os = this.socket.getOutputStream();
+   //   osw = new OutputStreamWriter(os);
+    //  bw = new BufferedWriter(osw);
       is = socket.getInputStream();
 
       isr = new InputStreamReader(is);
       br = new BufferedReader(isr);
+    //  synchronized(this)
+    // {
+      //ParentTag = mIn.readLine();
+      /*if(ParentTag == null)
+      {
+    	  ParentTag = "re";
+      }*/
       synchronized(this)
       {
-      while ((ParentTag = mIn.readLine()) != null) //읽어들일데이터가 없을떄까지 동작 
-	      {
-	        
-    	  System.out.println("while문 집입 후 "+ParentTag);
-	
-	        if (ParentTag.contains(",")) // ','가있는 데이터 즉 아이클라가 보낸 데이터 처리
-		    {
-		          
-		          Sending = ParentTag.split(","); // 태그명,위도/경도 형태로 들어오는 데이터를  ','를 기준으로 받은 데이터를 나눔
-		          Tag = Sending[0];  // 태그를  sending[0]에
-		          Loca = Sending[1];  // 위치정보를 sending[1]에 저장
+    	  //while(true)
+	      while (true) //읽어들일데이터가 없을떄까지 동작
+	     {
+		        System.out.println("while문 집입 후 "+ParentTag);
+		        ParentTag = mIn.readLine();
+		        System.out.println("읽어온값 :" + ParentTag);
+		        if(ParentTag != null){
+			        if (ParentTag.contains(",")) // ','가있는 데이터 즉 아이클라가 보낸 데이터 처리
+				    {
+				          System.out.println("아이부분 처리 if문");
+				          Sending = ParentTag.split(","); // 태그명,위도/경도 형태로 들어오는 데이터를  ','를 기준으로 받은 데이터를 나눔
+				          Tag = Sending[0];  // 태그를  sending[0]에
+				          Loca = Sending[1];  // 위치정보를 sending[1]에 저장
+				
+				          table.put(Sending[0], Sending[1]); //해쉬테이블에 태그 , 위치값을 넣음
+				
+				          
+				          Enumeration HT = table.keys(); //각각의 객체를 하나씩 처리 
+				
+				          System.out.println("while문 -  more element ");
+				          key = HT.nextElement().toString();
+				
+				          System.out.println("▷ key 값 : " + key + "  ▷ value 값 : " + table.get(key)); //키값과 밸유값을 출력
+				          
+				    }
+			        else if (ParentTag.equals(key)) //부모클라가 태그를 보내고 아이클라와 태그가 동일할시 작동
+				    {
+				          System.out.println("부모 부분 처리 if문 ");
+				
+				          //while((ParentTag = mIn.readLine()) != null)
+				          //while (true) //조건문 돔
+				          //{
+				            System.out.println("서버에서 보낸 데이터 : " + Loca);
+				          
+				            //mOut.write(Loca);
+				            bw.write(Loca); //부모클라에게 써줌
+				            bw.newLine();
+				            bw.flush();
+				            System.out.println("부모 클라이언트로부터 받은 데이터 : " + ParentTag);
+				            this.sleep(1); //다른쓰레드로 넘기기위해
+				          //
+				     }
+			        else
+			        {
+			        	System.out.println("아이,부모 태그가 일치하지 않을때 :"+ParentTag+ " \n 보내주는값: "+Loca);
+			        	
+			        	os = socket.getOutputStream();
+			            osw = new OutputStreamWriter(os);
+			            bw = new BufferedWriter(osw);
 		
-		          table.put(Sending[0], Sending[1]); //해쉬테이블에 태그 , 위치값을 넣음
 		
-		          
-		          Enumeration HT = table.keys(); //각각의 객체를 하나씩 처리 
+				
+			          System.out.println("else문. 위 조건 안걸림 ");
+			         bw.write(Loca); //부모클라에게 써줌 선문대
+			          bw.newLine();
+			           bw.flush();
+			            this.sleep(1); //다른쓰레드로 넘기기위해
 		
-		          System.out.println("while문 -  more element ");
-		          key = HT.nextElement().toString();
-		
-		          System.out.println("▷ key 값 : " + key + "  ▷ value 값 : " + table.get(key)); //키값과 밸유값을 출력
-		          
-		    }
-	        else if (ParentTag.equals(key)) //부모클라가 태그를 보내고 아이클라와 태그가 동일할시 작동
-		        {
-		          System.out.println("else if 문 들어옴 ");
-		
-		          while((ParentTag = mIn.readLine()) != null)
-		          //while (true) //조건문 돔
-		          {
-		            System.out.println("서버에서 보낸 데이터 : " + Loca);
-		            inputLine = Loca;
-		
-		            bw.write(inputLine); //부모클라에게 써줌
-		            bw.newLine();
-		            bw.flush();
-		            System.out.println("부모 클라이언트로부터 받은 데이터 : " + ParentTag);
-		            this.sleep(10); //다른쓰레드로 넘기기위해
-		          }
-		        }
-	        else
-	        {
-	          System.out.println("else문. 위 조건 안걸림 ");
-	        }
-	
-	        this.sleep(10); //다른쓰레드로 넘기기위해
-	      } //while문
-      }
+			        }
+			
+			        this.sleep(1); //다른쓰레드로 넘기기위해
+			  }
+	     } //while문
+      
+      }//s
     }
     catch (IOException e)
     {
