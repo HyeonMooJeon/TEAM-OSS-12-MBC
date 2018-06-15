@@ -921,7 +921,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Log.d(TAG, "서버에 읽은 Data:" + data);
 
                 String str = data;
-                String[] array = str.split(","); //받은 data를 잘라서 넣는다. 서버에서 처리해줘야함 ex) baby_1
+                String[] array = str.split("/"); //받은 data를 잘라서 넣는다. 서버에서 처리해줘야함 ex) baby_1
                 Log.d(TAG, "Data 처리 위도:" + array[0] + "경도:" + array[1]);
 
                 latitude = Double.parseDouble(array[0]);
