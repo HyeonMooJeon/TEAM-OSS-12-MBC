@@ -1,11 +1,10 @@
-package com.example.admin.safasdf;
+package com.example.person.bc_child;
 //로그인을 하기위한 창.
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 
 public class LoginActivity extends Activity {
@@ -22,15 +21,10 @@ public class LoginActivity extends Activity {
     //그거를 누를경우 아래 시작. 현재 액티비티에서
     public void login(View view) {
         id = et_id.getText().toString();
-        if(id.getBytes().length <= 0) {
-            Toast.makeText(this, "Tag값을 입력해주세요", Toast.LENGTH_LONG).show();
-        }
-        else {
-            Intent forMain = new Intent(LoginActivity.this, MainActivity.class);
-            forMain.putExtra("passID", id);
-            startActivity(forMain);
-            System.out.println("LoginActivity에서 " + id + "를 intent로 넘겨줍니다.\n");
-        }
+        Intent forMain = new Intent(LoginActivity.this , MainActivity.class);
+        forMain.putExtra("passID", id);
+        startActivity(forMain);
+        System.out.println("LoginActivity에서 "+ id + "를 intent로 넘겨줍니다.\n");
     }
 }
 

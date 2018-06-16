@@ -1,4 +1,4 @@
-package com.example.admin.safasdf;
+package com.example.person.bc_child;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
     String getID;
     public Socket socket;
     //----------------------------------------------------포트와 IP꼭 바꿔줄것!!
-    public static final int PORT = 7890;
-    public static final String IP = "192.168.55.140";
+    public static final int PORT = 9946;
+    public static final String IP = "192.168.0.101";
     public BufferedWriter networkWriter;
     Timer timer = null;
     TimerTask t;
@@ -98,23 +98,29 @@ public class MainActivity extends AppCompatActivity {
                     if(tb.isChecked()){ //수신될 경우
                         tv.setText("수신중..");
                         drawable.start();
-                        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000,  1000000, mLocationListener);
+                        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,  1000000, mLocationListener);
                         // 위치제공자 , 시간간격, 변경거리
-                        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 1000000, mLocationListener);
+                        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 1000000, mLocationListener);
 
                         t = new TimerTask() {
                             @Override
                             public void run() {
                                 try {
+
                                     String getinfo = SendData();
                                     PrintWriter out = new PrintWriter(networkWriter, true);
-                                    out.println(getinfo);
-                                    System.out.println("\n서버로 보내지는 데이터 = " + out +"\n보내야 하는 데이터 "+ getinfo);
+                                    if(getinfo!=null) {
+
+                                        out.println(getinfo);
+                                        System.out.println("\n서버로 보내지는 데이터 = " + out + "\n보내야 하는 데이터 " + getinfo);
+                                    }else {
+                                        out.println(getID+",0.0/0.0");
+                                    }
                                 }  catch (Exception e) { }
                             }
                         };
                         timer = new Timer();
-                        timer.schedule(t,0,10000);
+                        timer.schedule(t,0,5000);
 
                     }else{              //수신이 안되는경우
                         drawable.stop();
@@ -132,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
     public String SendData() {
         System.out.println("SendData를 호출했습니다.\n\n");
         //랜덤위치 보내는걸 취소하려면 아래의 줄을 주석처리 해줄것!!
-        //RandLocation();
+        RandLocation();
         return sendData;
     }
 

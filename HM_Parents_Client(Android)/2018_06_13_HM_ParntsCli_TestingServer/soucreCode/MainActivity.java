@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 //i가 저장되는 간격은 10초이므로 1 == 10초
                                 try {
                                     if (!((timeMarker.get(i = i + 1)) == null)) {
-                                          mGoogleMap.addMarker(new MarkerOptions().position(endLatLng.get(i))
+                                        mGoogleMap.addMarker(new MarkerOptions().position(endLatLng.get(i))
                                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.footprint))
                                                 .title("지나간 날자,시간")
                                                 .alpha(0.5f) //투명도 설정
@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 } catch(IndexOutOfBoundsException e){
                                     Log.d(TAG,"인덱스:" +i);
 
-                                    }
+                                }
                             }
                         }
 

@@ -1,4 +1,4 @@
-package Server;
+package songbong;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -81,7 +81,7 @@ public class ParentsThread extends Thread{
 	     
 		      while (true) 
 		     {
-		    	  this.sleep(1000);
+		    	  this.sleep(5000);
 				System.out.println("서버에서 보낸 데이터 : " + Loca);
 				os = socket.getOutputStream();
 				osw = new OutputStreamWriter(os);
@@ -101,7 +101,7 @@ public class ParentsThread extends Thread{
 				bw.newLine();
 				bw.flush();
 
-				this.sleep(1000);
+				this.sleep(5000);
 		     } //while문
 	     
 	    }

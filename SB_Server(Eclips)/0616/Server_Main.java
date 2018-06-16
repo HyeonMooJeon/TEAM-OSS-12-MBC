@@ -1,4 +1,4 @@
-package Server;
+package songbong;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.net.Socket;
 import java.util.Hashtable;
 
 public class Server_Main {
-   private static final int PORT = 8079; //포트 지정
+   private static final int PORT = 9946; //포트 지정
    
  //버퍼 다해놓음 
    public void go() throws IOException{
@@ -73,11 +73,14 @@ public class Server_Main {
              if( data.contains(",")){
             	 //스플릿 나눈다. 0번째는 태그 여기서 ,콤마가있으면 자식스레드
             	 // ,가없으면 부모스레드    
+            	 System.out.println("자식 Thread 실행");
             	 ChildThread childThread = new ChildThread(clientSocket, ht);
             	 childThread.start();
             	 //CliThread cliThread = new CliThread(clientSocket);
                  //cliThread.start();
              }else{
+
+            	 System.out.println("부모 Thread 실행");
             	 ParentsThread parentThread = new ParentsThread(clientSocket, ht);
             	 parentThread.start();
              }

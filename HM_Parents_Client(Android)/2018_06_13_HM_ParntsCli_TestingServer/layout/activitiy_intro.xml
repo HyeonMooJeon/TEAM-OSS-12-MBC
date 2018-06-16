@@ -13,16 +13,6 @@
         android:src="@drawable/intro" />
 
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp"
-        app:lottie_autoPlay="true"
-        app:lottie_fileName="location.json" />
-
-
 
 </RelativeLayout>
     <!--단순 시작화면 표시.-->

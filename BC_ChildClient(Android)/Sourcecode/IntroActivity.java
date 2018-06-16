@@ -1,4 +1,4 @@
-package com.example.admin.safasdf;
+package com.example.person.bc_child;
 //앱 시작시 보여주는 창.
 import android.app.Activity;
 import android.content.Intent;
